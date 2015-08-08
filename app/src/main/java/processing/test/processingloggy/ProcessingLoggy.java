@@ -17,6 +17,7 @@ import java.io.IOException;
 public class ProcessingLoggy extends PApplet {
 
   Log log;
+  SerialCommunicator serial;
 
   public void startSerial() {
   }
@@ -24,15 +25,31 @@ public class ProcessingLoggy extends PApplet {
   public void setup() {
     log = new Log(this);
     log.append("hello");
+    log.append("long long long long the quick brown fox jumps over the lazy dog");
+
+    serial = new SerialCommunicator(log);
+
+    serial.OpenConnection(this);
+
 
   }
 
   public void draw() {
+    delay(10000);
+    background(128);
     log.draw(this);
+
+    byte buffer[] = { 'p', 'i', 'n', 'g' };
+    int wroteBytes = serial.WriteBytes(buffer);
+    log.append("wrote " + wroteBytes + " to serial");
+
+    int readBytes = serial.ReadBytes(buffer);
+    log.append("read " + readBytes + " bytes (" + new String(buffer) + ") from serial");
+
   }
 
   public void settings() {
-    size(800, 1600);
+    size(1200, 1600);
   }
 
 

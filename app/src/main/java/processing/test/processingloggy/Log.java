@@ -10,16 +10,23 @@ import processing.core.PFont;
  */
 public class Log {
     static final int FONT_SIZE = 46;
-    static final int MAX_LOG_LENGTH = 20;
+    static final int MAX_LOG_LENGTH = 30;
+    static final int MAX_LOG_WIDTH = 50;
 
     ArrayList<String> log = new ArrayList<String>();
     PFont font;
 
     public Log(PApplet applet) {
-        font = applet.createFont("Helvetica", FONT_SIZE, true);
+        font = applet.createFont("Droid Sans Mono", FONT_SIZE, true);
     }
 
     public void append(String message) {
+
+        while (message.length() > MAX_LOG_WIDTH) {
+            append(message.substring(0, MAX_LOG_WIDTH));
+            message = message.substring(MAX_LOG_WIDTH);
+        }
+
         log.add(message);
 
         while (log.size() > MAX_LOG_LENGTH) {
@@ -29,8 +36,8 @@ public class Log {
 
     public void draw(PApplet applet) {
         applet.textFont(font);
-        int y = FONT_SIZE + 5;
-        int lineHeight = 20;
+        int lineHeight = FONT_SIZE + 5;
+        int y = lineHeight + 5;
         for (int i = 0; i < log.size(); i++) {
             applet.text(log.get(i), 10, y);
             y += lineHeight;
